@@ -4,9 +4,11 @@ from flask import Flask, request, jsonify
 from pymongo import MongoClient
 from mailchimp_marketing import Client
 from mailchimp_marketing.api_client import ApiClientError
+from flask_cors import CORS
 import requests
 
 app = Flask(__name__)
+CORS(app)
 
 load_dotenv()
 

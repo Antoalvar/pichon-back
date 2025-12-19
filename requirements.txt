@@ -3,6 +3,7 @@ gunicorn==23.0.0  # Versión estable recomendada en 2025
 
 # Framework web y entorno
 Flask
+flask-cors
 python-dotenv
 
 # Base de datos (MongoDB Atlas)

@@ -1,0 +1,12 @@
+# Framework web y entorno
+Flask
+python-dotenv
+
+# Base de datos (MongoDB Atlas)
+pymongo[srv]
+
+# Integración con Mailchimp
+mailchimp-marketing
+
+# Peticiones HTTP y utilidades
+requests

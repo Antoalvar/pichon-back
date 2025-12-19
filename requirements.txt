@@ -1,3 +1,6 @@
+# Servidor de producción (Obligatorio para Render)
+gunicorn==23.0.0  # Versión estable recomendada en 2025
+
 # Framework web y entorno
 Flask
 python-dotenv

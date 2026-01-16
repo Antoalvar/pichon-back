@@ -4,16 +4,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Config:
-    # PostgreSQL Configuration
-    POSTGRES_URI_LOCAL = os.getenv(
-        "POSTGRES_URI_LOCAL",
-        "postgresql://manager:ThaoGZ5n9XowXVpWFEHzKWLqaYlmU8uL@dpg-d5l7ili4d50c73e16830-a.virginia-postgres.render.com/pichon_db"
-    )
-    POSTGRES_URI_PROD = os.getenv(
-        "POSTGRES_URI_PROD",
-        "postgresql://manager:ThaoGZ5n9XowXVpWFEHzKWLqaYlmU8uL@dpg-d5l7ili4d50c73e16830-a/pichon_db"
-    )
+    # Environment
     ENVIRONMENT = os.getenv("ENVIRONMENT", "local")
+
+    # PostgreSQL Configuration
+    POSTGRES_URI_LOCAL = os.getenv("POSTGRES_URI_LOCAL")
+    POSTGRES_URI_PROD = os.getenv("POSTGRES_URI_PROD")
     POSTGRES_URI = POSTGRES_URI_PROD if ENVIRONMENT == "production" else POSTGRES_URI_LOCAL
 
     # Mailchimp Configuration

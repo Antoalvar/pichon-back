@@ -1,16 +1,17 @@
 # Servidor de producción (Obligatorio para Render)
-gunicorn==23.0.0  # Versión estable recomendada en 2025
+gunicorn==23.0.0
 
 # Framework web y entorno
 Flask
 flask-cors
 python-dotenv
 
-# Base de datos (MongoDB Atlas)
-pymongo[srv]
+# Base de datos (PostgreSQL)
+psycopg2-binary
 
 # Integración con Mailchimp
 mailchimp-marketing
 
 # Peticiones HTTP y utilidades
 requests
+

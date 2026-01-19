@@ -11,7 +11,7 @@ class PichonDBService:
     def get_connection():
         """
         Establece una conexión a PostgreSQL.
-        
+
         Returns:
             psycopg2.connection: Conexión a la base de datos
         """
@@ -21,7 +21,7 @@ class PichonDBService:
     def get_all_index():
         """
         Obtiene todos los registros de la tabla index.
-        
+
         Returns:
             list: Lista de registros (diccionarios)
         """
@@ -40,13 +40,13 @@ class PichonDBService:
             return records
 
         except psycopg2.Error as e:
-            raise Exception(f"Error en la base de datos: {str(e)}")
+            raise Exception(f"Error en la base de datos Pichón: {str(e)}")
 
     @staticmethod
     def insert_index(entry_id, img, title, abstract, categories_str, prod):
         """
         Inserta un nuevo registro en la tabla index.
-        
+
         Args:
             entry_id (str): ID único del registro
             img (str): URL de la imagen
@@ -54,7 +54,7 @@ class PichonDBService:
             abstract (str): Resumen
             categories_str (str): Categorías (separadas por comas)
             prod (bool): Indica si está en producción
-        
+
         Raises:
             Exception: Si ocurre un error en la base de datos
         """
@@ -86,7 +86,7 @@ class IndexService:
     def get_all_indexes():
         """
         Obtiene todos los índices y formatea las categorías.
-        
+
         Returns:
             list: Lista de índices formateados
         """
@@ -106,7 +106,7 @@ class IndexService:
     def create_index(img, title, abstract, categories, prod, entry_id=None):
         """
         Crea un nuevo índice con validación y generación de ID si es necesario.
-        
+
         Args:
             img (str): URL de la imagen
             title (str): Título
@@ -114,7 +114,7 @@ class IndexService:
             categories (list): Lista de categorías
             prod (bool): Indicador de producción
             entry_id (str, optional): ID personalizado. Si no se proporciona, se genera uno.
-        
+
         Returns:
             str: ID del registro creado
         """

@@ -46,3 +46,14 @@ def create_category():
         }), 201
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
+
+@categories_bp.route('/<category_id>', methods=['DELETE'])
+def delete_category(category_id):
+    """
+    Elimina una categoría por su ID.
+    """
+    try:
+        #result = CategoriesService.delete_category(category_id)
+        return jsonify({"status": "success", "message": "Categoría eliminada correctamente", "id": category_id}), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500

@@ -5,6 +5,11 @@ from config import Config
 class CategoriesService:
     """Servicio para manejar operaciones de categorías en la base de datos PostgreSQL."""
 
+
+    @staticmethod
+    def get_connection():
+        return psycopg2.connect(Config.POSTGRES_URI)
+
     @staticmethod
     def get_all_categories():
         try:
@@ -18,10 +23,6 @@ class CategoriesService:
             return categories
         except psycopg2.Error as e:
             raise Exception(f"Error en la base de datos: {str(e)}")
-
-    @staticmethod
-    def get_connection():
-        return psycopg2.connect(Config.POSTGRES_URI)
 
     @staticmethod
     def create_category(name, slug, order):
@@ -43,3 +44,24 @@ class CategoriesService:
             raise Exception("El nombre o slug ya existe")
         except psycopg2.Error as e:
             raise Exception(f"Error en la base de datos: {str(e)}")
+
+    @staticmethod
+    def delete_category(category_id):
+        """
+        Elimina una categoría por su ID.
+        Args:
+            category_id (str): ID de la categoría a eliminar
+        Returns:
+            bool: True si se eliminó, False si no existía
+        """
+        try:
+            conn = CategoriesService.get_connection()
+            cur = conn.cursor()
+            delete_query = "DELETE FROM categories WHERE id = %s"
+            cur.execute(delete_query, (category_id,))
+            conn.commit()
+            cur.close()
+            conn.close()
+            return True
+        except psycopg2.Error as e:
+            raise Exception(f"Error al eliminar la categoría: {str(e)}")

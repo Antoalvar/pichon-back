@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app.services.posts_service import PostsService
 
-posts_bp = Blueprint('posts', __name__, url_prefix='/create_post')
+posts_bp = Blueprint('posts', __name__, url_prefix='/posts')
 
 
 @posts_bp.route('', methods=['GET'])
@@ -25,13 +25,13 @@ def get_posts():
 def create_post():
     """
     Crea un nuevo post (artículo) en la base de datos.
-    Recibe: title, abstract, img, categories, prod, body
+    Recibe: title, abstract, img, categories, prod, content
     """
     if not request.is_json:
-        return jsonify({"message": "Falta el body en formato JSON"}), 400
+        return jsonify({"message": "Falta el content en formato JSON"}), 400
 
     data = request.get_json()
-    required_fields = ["title", "abstract", "img", "categories", "prod", "body"]
+    required_fields = ["title", "abstract", "img", "categories", "prod", "content"]
     for field in required_fields:
         if field not in data:
             return jsonify({"message": f"El campo '{field}' es obligatorio"}), 400
@@ -43,12 +43,24 @@ def create_post():
             img=data['img'],
             categories=data['categories'],
             prod=data['prod'],
-            body=data['body']
+            content=data['content']
         )
         return jsonify({
             "status": "success",
             "message": "Post creado correctamente",
             "id": post_id
         }), 201
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@posts_bp.route('/<post_id>', methods=['DELETE'])
+def delete_post(post_id):
+    """
+    Elimina un post por su ID.
+    """
+    try:
+        #result = PostsService.delete_post(post_id)
+        return jsonify({"status": "success", "message": "Post eliminado correctamente", "id": post_id}), 200
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500

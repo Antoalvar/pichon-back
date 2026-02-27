@@ -54,13 +54,54 @@ def create_post():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
+@posts_bp.route('/<post_id>', methods=['GET'])
+def get_post(post_id):
+    """
+    Obtiene un post específico por su ID.
+    """
+    try:
+        post = PostsService.get_post_by_id(post_id)
+        if post is None:
+            return jsonify({"status": "error", "message": "Post no encontrado"}), 404
+        return jsonify({"status": "success", "data": post}), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@posts_bp.route('/<post_id>', methods=['PATCH'])
+def update_post(post_id):
+    """
+    Actualiza parcialmente un post por su ID.
+    Solo se actualizan los campos recibidos en el body.
+    """
+    if not request.is_json:
+        return jsonify({"message": "Se requiere content en formato JSON"}), 400
+
+    data = request.get_json()
+    allowed_fields = {"title", "abstract", "img", "categories", "prod", "content"}
+    fields = {k: v for k, v in data.items() if k in allowed_fields}
+
+    if not fields:
+        return jsonify({"message": "No se proporcionaron campos válidos para actualizar"}), 400
+
+    try:
+        updated = PostsService.update_post(post_id, fields)
+        if not updated:
+            return jsonify({"status": "error", "message": "Post no encontrado"}), 404
+        return jsonify({"status": "success", "message": "Post actualizado correctamente", "id": post_id}), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
 @posts_bp.route('/<post_id>', methods=['DELETE'])
 def delete_post(post_id):
     """
     Elimina un post por su ID.
     """
     try:
-        #result = PostsService.delete_post(post_id)
+        deleted = PostsService.delete_post(post_id)
+        if not deleted:
+            return jsonify({"status": "error", "message": "Post no encontrado"}), 404
         return jsonify({"status": "success", "message": "Post eliminado correctamente", "id": post_id}), 200
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500

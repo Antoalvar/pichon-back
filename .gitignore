@@ -140,3 +140,4 @@ env/
 venv
 
 .vscode
+.github

@@ -29,6 +29,7 @@ class PostsService:
             SELECT
                 p.id,
                 p.title,
+                p.slug,
                 p.abstract,
                 p.thumbnail_url,
                 p.published_at,

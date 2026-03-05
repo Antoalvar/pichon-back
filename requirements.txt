@@ -11,6 +11,7 @@ psycopg2-binary
 
 # Integración con Mailchimp
 mailchimp-marketing
+mailchimp-transactional
 
 # Peticiones HTTP y utilidades
 requests

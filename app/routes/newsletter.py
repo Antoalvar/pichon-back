@@ -6,6 +6,36 @@ newsletter_bp = Blueprint('newsletter', __name__, url_prefix='')
 mailchimp_service = MailchimpService()
 
 
+@newsletter_bp.route("/send_info_email", methods=["POST"])
+def send_info_email():
+    """
+    Triggers a Mailchimp Customer Journey to send an info email.
+    Recibe: email (requerido), fname (requerido), journey_id (requerido), step_id (requerido)
+    """
+    if not request.is_json:
+        return jsonify({"message": "Falta el body en formato JSON"}), 400
+
+    data = request.get_json()
+    email = data.get('email')
+    fname = data.get('fname')
+    journey_id = data.get('journey_id')
+    step_id = data.get('step_id')
+
+    if not email:
+        return jsonify({"message": "El campo 'email' es obligatorio"}), 400
+    if not fname:
+        return jsonify({"message": "El campo 'fname' es obligatorio"}), 400
+    if not journey_id or not step_id:
+        return jsonify({"message": "Los campos 'journey_id' y 'step_id' son obligatorios"}), 400
+
+    success, message = mailchimp_service.trigger_info_email(email, fname, journey_id, step_id)
+
+    if success:
+        return jsonify({"status": "success", "message": message}), 200
+    else:
+        return jsonify({"status": "error", "message": message}), 400
+
+
 @newsletter_bp.route("/subscribe_newsletter", methods=["POST"])
 def subscribe_newsletter():
     """

@@ -1,6 +1,7 @@
 from mailchimp_marketing import Client
 from mailchimp_marketing.api_client import ApiClientError
 import requests
+import hashlib
 from config import Config
 
 
@@ -45,18 +46,23 @@ class MailchimpService:
 
     def subscribe_user(self, email_address, first_name, last_name=""):
         """
-        Suscribe un usuario a la lista de Mailchimp.
-        
+        Suscribe (o reactiva) un usuario en la lista de Mailchimp.
+        Usa el endpoint PUT (upsert) para manejar contactos nuevos, existentes
+        y aquellos que fueron eliminados permanentemente.
+
         Args:
             email_address (str): Email del usuario
             first_name (str): Nombre del usuario
             last_name (str): Apellido del usuario (opcional)
-        
+
         Returns:
             tuple: (success: bool, message: str)
         """
+        subscriber_hash = hashlib.md5(email_address.lower().encode()).hexdigest()
+
         payload = {
             "email_address": email_address,
+            "status_if_new": "subscribed",
             "status": "subscribed",
             "merge_fields": {
                 "FNAME": first_name,
@@ -65,7 +71,9 @@ class MailchimpService:
         }
 
         try:
-            response = self.mailchimp.lists.add_list_member(Config.MAILCHIMP_LIST_ID, payload)
+            response = self.mailchimp.lists.set_list_member(
+                Config.MAILCHIMP_LIST_ID, subscriber_hash, payload
+            )
             return True, f"response: {response}"
 
         except ApiClientError as error:

@@ -74,7 +74,7 @@ class MailchimpService:
             response = self.mailchimp.lists.set_list_member(
                 Config.MAILCHIMP_LIST_ID, subscriber_hash, payload
             )
-            return True, f"response: {response}"
+            return True, "Usuario suscrito correctamente"
 
         except ApiClientError as error:
             return False, f"An exception occurred: {error.text}"
@@ -83,12 +83,6 @@ class MailchimpService:
             print(f"Error de conexión: {e}")
             return False, "No se pudo conectar con el servidor de Mailchimp."
 
-    @staticmethod
-    def ping():
+    def ping(self):
         """Verifica la conexión con Mailchimp."""
-        mailchimp = Client()
-        mailchimp.set_config({
-            "api_key": Config.MAILCHIMP_API_KEY,
-            "server": Config.MAILCHIMP_DC
-        })
-        return mailchimp.ping.get()
+        return self.mailchimp.ping.get()

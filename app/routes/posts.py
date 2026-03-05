@@ -54,6 +54,18 @@ def create_post():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
+@posts_bp.route('/search', methods=['GET'])
+def search_posts():
+    q = request.args.get('q', '').strip()
+    if not q:
+        return jsonify({"message": "El parámetro 'q' es obligatorio"}), 400
+    try:
+        results = PostsService.search_posts(q)
+        return jsonify({"status": "success", "data": results, "count": len(results)}), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
 @posts_bp.route('/<post_id>', methods=['GET'])
 def get_post(post_id):
     """

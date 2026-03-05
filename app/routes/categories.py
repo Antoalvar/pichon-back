@@ -53,7 +53,9 @@ def delete_category(category_id):
     Elimina una categoría por su ID.
     """
     try:
-        #result = CategoriesService.delete_category(category_id)
+        deleted = CategoriesService.delete_category(category_id)
+        if not deleted:
+            return jsonify({"status": "error", "message": "Categoría no encontrada"}), 404
         return jsonify({"status": "success", "message": "Categoría eliminada correctamente", "id": category_id}), 200
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500

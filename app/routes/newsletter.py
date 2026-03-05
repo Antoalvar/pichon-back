@@ -3,8 +3,6 @@ from app.services.mailchimp_service import MailchimpService
 
 newsletter_bp = Blueprint('newsletter', __name__, url_prefix='')
 
-mailchimp_service = MailchimpService()
-
 
 @newsletter_bp.route("/send_info_email", methods=["POST"])
 def send_info_email():
@@ -28,6 +26,7 @@ def send_info_email():
     if not journey_id or not step_id:
         return jsonify({"message": "Los campos 'journey_id' y 'step_id' son obligatorios"}), 400
 
+    mailchimp_service = MailchimpService()
     success, message = mailchimp_service.trigger_info_email(email, fname, journey_id, step_id)
 
     if success:
@@ -43,24 +42,20 @@ def subscribe_newsletter():
     Recibe: email (requerido), fname (nombre), lname (apellido, opcional)
     """
 
-    # 1. Verificar que la petición contenga datos JSON
     if not request.is_json:
         return jsonify({"message": "Falta el body en formato JSON"}), 400
 
-    # 2. Extraer los datos del cuerpo JSON de la petición
     data = request.get_json()
     email = data.get('email', None)
     fname = data.get('fname', None)
     lname = data.get('lname', "")
 
-    # 3. Validaciones básicas
     if not email:
         return jsonify({"message": "El campo 'email' es obligatorio"}), 400
 
-    # 4. Llamar al servicio de Mailchimp
+    mailchimp_service = MailchimpService()
     success, message = mailchimp_service.subscribe_user(email, fname, lname)
 
-    # 5. Devolver la respuesta adecuada
     if success:
         return jsonify({"status": "success", "message": message}), 200
     else:
